@@ -10,8 +10,8 @@ const Home = props => {
         {props.children}
       </Box>
 
-      <style jsx global>{`
-        body {
+      <style jsx>{`
+        :global(body) {
           background-color: #458530;
           minheight: 100vh;
           margin: 0;

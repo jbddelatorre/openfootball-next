@@ -10,8 +10,10 @@ import IconButton from "@material-ui/core/IconButton";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
-import { makeStyles, withStyles } from "@material-ui/styles";
-import { sizing, spacing, palette } from "@material-ui/system";
+import { withStyles } from "@material-ui/styles";
+// import { sizing, spacing, palette } from "@material-ui/system";
+
+import fetch from "isomorphic-unfetch";
 
 const CssTextField = withStyles({
   root: {
@@ -42,6 +44,38 @@ const LoginCard = props => {
 
   const handleClickShowPassword = () => {
     setToggle(!togglePassword);
+  };
+
+  const handleLoginSubmit = async () => {
+    const loginDetails = {
+      email,
+      password
+    };
+
+    const fetchData = {
+      method: "POST",
+      body: JSON.stringify(loginDetails),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    };
+
+    if (!email || !password) return;
+
+    setEmail("");
+    setPassword("");
+
+    try {
+      const result = await fetch(
+        "http://localhost:5000/api/accounts/login",
+        fetchData
+      );
+
+      const data = await result.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -92,7 +126,9 @@ const LoginCard = props => {
             color="#458530"
           >
             <Button color="inherit">Create an Account</Button>
-            <Button color="inherit">Log In</Button>
+            <Button color="inherit" onClick={handleLoginSubmit}>
+              Log In
+            </Button>
           </Box>
         </Box>
       </Paper>
